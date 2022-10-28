@@ -22,10 +22,12 @@ class Stats:
          only for values already on data
 
         """
+        assert isinstance(value, int)
         idx = self.inv_keys[value]
         return self.counter[self.keys[idx - 1]] if idx > 0 else 0
 
     def greater(self, value):
+        assert isinstance(value, int)
         """Return number of elements greater than value, O(1) time complexity,
          only for values already on data
 
@@ -49,6 +51,7 @@ class DataCapture:
 
     def add(self, elem):
         "Add elements, O(1) time complexity"
+        assert isinstance(elem, int)
         self.data_elems.append(elem)
 
     def build_stats(self):

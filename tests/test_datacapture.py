@@ -19,10 +19,18 @@ def stats_b(capture):
     "Instantiate Stats class from filled DataCapture class"
     return capture.build_stats_b()
 
+
 @pytest.fixture
 def stats(capture):
     "Instantiate Stats class from filled DataCapture class"
     return capture.build_stats()
+
+
+def test_add():
+    "Test add validation"
+    capture = DataCapture()
+    with pytest.raises(AssertionError):
+        capture.add(3.4)
 
 
 def test_less_b(stats_b):
