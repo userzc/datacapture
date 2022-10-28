@@ -38,12 +38,9 @@ class DataCapture:
     def __init__(self):
         "DataCapture constructor"
         self.data_elems = []
-        # self.set_elems = set()
 
     def add(self, elem):
-        # self.data_elems.append(elem)
         insort(self.data_elems, elem)
-        # self.set_elems.add(elem)
 
     def build_stats(self):
         "Build stats of captured data"
