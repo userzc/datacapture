@@ -25,8 +25,8 @@ stats.greater(4)
 
 The class has two different stats objects:
 
-* `Stats`, on which the methods are $O(1)$ time complexity based on range query algorithms, but only works for data already captured.
-* `StatsB`, on which the methods are $O(log(n))$ time complexity based on bisect algorithms, any int value.
+* `Stats`, by running `capture.build_stats()`, on which the methods are $O(1)$ time complexity based on range query algorithms, but only works for data already captured.
+* `StatsB`, by running `capture.build_stats_b()`, on which the methods are $O(log(n))$ time complexity based on bisect algorithms, any int value.
 
 # Tests
 
@@ -49,7 +49,7 @@ workon datacapture
 
 ### Test execution
 
-At the repo root, run the tests with:
+At the repo root and with the environment active, run the tests with:
 
 ``` shell
 PYTHONPATH=src/ pytest -v

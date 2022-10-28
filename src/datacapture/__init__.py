@@ -4,10 +4,10 @@ from collections import Counter
 
 class Stats:
     def __init__(self, data):
-        "Stats constructor, O(n) time complexity"
-        data.sort()
+        "Stats constructor, O(n + log(n) ) time complexity"
         self.counter = Counter(data)
         self.keys = list(self.counter)
+        # Only this key sorting gives O(n + log(n) ) complexity
         self.keys.sort()
         self.inv_keys = {}
         print(f'data: {data}')
