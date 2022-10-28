@@ -10,17 +10,12 @@ class Stats:
         # Only this key sorting gives O(n + log(n) ) complexity
         self.keys.sort()
         self.inv_keys = {}
-        print(f'data: {data}')
-        print(f'keys: {self.keys}')
-        print(f'counter: {self.counter}')
         acc = 0
         for idx, key in enumerate(self.keys):
             self.counter[key] += acc
             acc = self.counter[key]
             self.inv_keys[key] = idx
         self.total = acc
-        print(f'inv_keys: {self.inv_keys}')
-        print(f'updated counter: {self.counter}')
 
     def less(self, value):
         """Return number of elements less than value, O(1) time complexity,
@@ -76,15 +71,11 @@ class StatsB:
         data.sort()
         self.counter = Counter(data)
         self.keys = list(self.counter)
-        print(f'data: {data}')
-        print(f'keys: {self.keys}')
-        print(f'counter: {self.counter}')
         acc = 0
         for key in self.keys:
             self.counter[key] += acc
             acc = self.counter[key]
         self.total = acc
-        print(f'updated counter: {self.counter}')
 
     def less(self, value):
         """Return number of elements less than value, O(n * log(n)) time
