@@ -21,12 +21,28 @@ stats.between(3, 6)
 stats.greater(4)
 ```
 
-## Note
+## Stats classes
 
-The class has two different stats objects:
+The class has two different stats objects due to the trade-off between time complexity compliance and support for non-captured values on the class methods:
 
-* `Stats`, by running `capture.build_stats()`, on which the methods are $O(1)$ time complexity based on range query algorithms, but only works for data already captured.
-* `StatsB`, by running `capture.build_stats_b()`, on which the methods are $O(log(n))$ time complexity based on bisect algorithms, any int value.
+### `Stats`
+Obtained from `DataCapture` instance by running `capture.build_stats()`.
+
+Methods are $O(1)$ time complexity based on *range query algorithms*, but only works for data already captured in order to comply with that restriction.
+
+> Note: It is possible to have this class constructor to run on $O(n)$
+> but it would require that the captured data would be already sorted.
+
+
+
+### `StatsB`
+Obtained from `DataCapture` instance by running `capture.build_stats_b()`.
+
+Methods are $O(log(n))$ time complexity based on *bisect algorithms*, and can receive any float value.
+
+> Note: The class constructor for this class has $O(n)$ time
+> complexity and the class methods have $O(n * log(n))$ time
+> complexity in exchange for non-captured values support.
 
 # Tests
 

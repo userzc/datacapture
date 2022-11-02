@@ -15,6 +15,18 @@ def capture():
 
 
 @pytest.fixture
+def capture_neg():
+    "Instantiate DataCapture class"
+    capture_neg = DataCapture()
+    capture_neg.add(-3)
+    capture_neg.add(-9)
+    capture_neg.add(-3)
+    capture_neg.add(-4)
+    capture_neg.add(-6)
+    return capture_neg
+
+
+@pytest.fixture
 def stats_b(capture):
     "Instantiate Stats class from filled DataCapture class"
     return capture.build_stats_b()
@@ -26,15 +38,23 @@ def stats(capture):
     return capture.build_stats()
 
 
+@pytest.fixture
+def stats_neg(capture_neg):
+    "Instantiate Stats class from filled DataCapture class"
+    return capture_neg.build_stats()
+
+
+@pytest.mark.xfail(
+    raises=AssertionError,
+    reason="Data input restrictions")
 def test_add():
-    "Test add validation"
+    "Test add validation, expected to fail"
     capture = DataCapture()
-    with pytest.raises(AssertionError):
-        capture.add(3.4)
+    capture.add(3.4)
 
 
 def test_less_b(stats_b):
-    "should return 2 (only two values 3, 3 are less than 4)"
+    "Should return 2 (only two values 3, 3 are less than 4)"
     assert stats_b.less(0) == 0
     assert stats_b.less(3) == 0
     assert stats_b.less(4) == 2
@@ -44,7 +64,7 @@ def test_less_b(stats_b):
 
 
 def test_greater_b(stats_b):
-    "should return 2 (6 and 9 are the only two values greater than 4)"
+    "Should return 2 (6 and 9 are the only two values greater than 4)"
     assert stats_b.greater(0) == 5
     assert stats_b.greater(4) == 2
     assert stats_b.greater(5) == 2
@@ -57,15 +77,23 @@ def test_greater_b(stats_b):
 
 
 def test_between_b(stats_b):
-    "should return 4 (3, 3, 4 and 6 are between 3 and 6)"
+    "Should return 4 (3, 3, 4 and 6 are between 3 and 6)"
     assert stats_b.between(3, 6) == 4
     assert stats_b.between(3, 9) == 5
     assert stats_b.between(2, 10) == 5
     assert stats_b.between(4, 9) == 3
 
 
+@pytest.mark.xfail(
+    raises=KeyError,
+    reason="Should fail to comply with O(1) time complexity")
+def test_non_captured_less(stats):
+    "Should fail to comply with O(1) time complexity"
+    assert stats.less(5) == 0
+
+
 def test_less(stats):
-    "should return 2 (only two values 3, 3 are less than 4)"
+    "Should return 2 (only two values 3, 3 are less than 4)"
     assert stats.less(3) == 0
     assert stats.less(4) == 2
     assert stats.less(3) == 0
@@ -73,16 +101,49 @@ def test_less(stats):
 
 
 def test_greater(stats):
-    "should return 2 (6 and 9 are the only two values greater than 4)"
+    "Should return 2 (6 and 9 are the only two values greater than 4)"
     assert stats.greater(4) == 2
     assert stats.greater(3) == 3
     assert stats.greater(6) == 1
     assert stats.greater(9) == 0
 
 
-def testetween(stats):
-    "should return 4 (3, 3, 4 and 6 are between 3 and 6)"
+def test_between(stats):
+    "Should return 4 (3, 3, 4 and 6 are between 3 and 6)"
     assert stats.between(3, 6) == 4
     assert stats.between(3, 9) == 5
     assert stats.between(4, 9) == 3
     assert stats.between(3, 9) == 5
+
+
+@pytest.mark.xfail(
+    raises=AssertionError,
+    reason="Should fail when the range is not correct")
+def test_betweet_correct_range(stats):
+    "Should fail when the range is not correct"
+    assert stats.between(3, 9) == 5
+    assert stats.between(9, 3) == 5
+
+
+def test_less_neg(stats_neg):
+    "Should return 2 (only two values 3, 3 are less than 4)"
+    assert stats_neg.less(-3) == 3
+    assert stats_neg.less(-4) == 2
+    assert stats_neg.less(-3) == 3
+    assert stats_neg.less(-6) == 1
+
+
+def test_greater_neg(stats_neg):
+    "Should return 2 (6 and 9 are the only two values greater than 4)"
+    assert stats_neg.greater(-4) == 2
+    assert stats_neg.greater(-3) == 0
+    assert stats_neg.greater(-6) == 3
+    assert stats_neg.greater(-9) == 4
+
+
+def test_between_neg(stats_neg):
+    "Should return 4 (3, 3, 4 and 6 are between 3 and 6)"
+    assert stats_neg.between(-6, -3) == 4
+    assert stats_neg.between(-9, -3) == 5
+    assert stats_neg.between(-9, -4) == 3
+    assert stats_neg.between(-9, -3) == 5
