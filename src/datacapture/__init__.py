@@ -13,7 +13,8 @@ class Stats:
         self.keys = list(self.counter)
         # Only this key sorting gives O(n + log(n) ) complexity
         # If data is already sorted, this could have O(n) complexity
-        self.keys.sort()
+        if not all(a <= b for a, b in zip(data[:-1], data[1:])):
+            self.keys.sort()
         self.inv_keys = {}
         acc = 0
         for idx, key in enumerate(self.keys):
